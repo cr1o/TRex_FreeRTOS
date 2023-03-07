@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "UART.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -72,10 +73,19 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  //Enable clock PORT C
+  RCC->AHBENR |= RCC_AHBENR_GPIOAEN;  //Enable clock PORT A
   //-----------------   PWM_En   ----------------------------------
-	//M1_En
+	GPIOA->MODER &= ~GPIO_MODER_MODER0_Msk; //Input mode PA0
+  GPIOA->MODER &= ~GPIO_MODER_MODER12_Msk; //Input mode PA12
+
+  //M1_En
 	GPIOC->MODER |= GPIO_MODER_MODER9_0;	//General purpose OutPut mode
 	GPIOC->OTYPER &= ~GPIO_OTYPER_OT_9;	//PUSH PULL
+
+  #define UART1_BAUDRATE 9600
+
+  UART1_Init(UART1_BAUDRATE);
+
 
   /* USER CODE END 1 */
 
@@ -195,13 +205,24 @@ void SystemClock_Config(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  char arr[] = "Hello world";
   /* Infinite loop */
+  volatile uint32_t count = 0;
+
   for(;;)
   {
-    GPIOC->BSRR |= GPIO_BSRR_BS_9;
-    osDelay(100);
+    if ((GPIOA->IDR & GPIO_IDR_0) == 1 ) {
+      count = 0;
+      USART1_Send_Str(arr);  
+      GPIOC->BSRR |= GPIO_BSRR_BS_9;
+      osDelay(500);      
+    } 
+    if ((GPIOA->IDR & GPIO_IDR_12) != 0 ) {
+      count++;
+      GPIOC->BSRR |= GPIO_BSRR_BS_9;
+      osDelay(500);      
+    }
     GPIOC->BSRR |= GPIO_BSRR_BR_9;
-    osDelay(100);
   }
   /* USER CODE END 5 */
 }
