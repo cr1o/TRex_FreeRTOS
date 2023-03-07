@@ -570,6 +570,7 @@ __NO_RETURN void osThreadExit (void) {
 
 osStatus_t osThreadTerminate (osThreadId_t thread_id) {
   TaskHandle_t hTask = (TaskHandle_t)thread_id;
+  (void) hTask;
   osStatus_t stat;
 #ifndef USE_FreeRTOS_HEAP_1
   eTaskState tstate;
@@ -967,6 +968,7 @@ uint32_t osTimerIsRunning (osTimerId_t timer_id) {
 
 osStatus_t osTimerDelete (osTimerId_t timer_id) {
   TimerHandle_t hTimer = (TimerHandle_t)timer_id;
+  (void) hTimer;
   osStatus_t stat;
 #ifndef USE_FreeRTOS_HEAP_1
   TimerCallback_t *callb;
@@ -1147,6 +1149,7 @@ uint32_t osEventFlagsWait (osEventFlagsId_t ef_id, uint32_t flags, uint32_t opti
 
 osStatus_t osEventFlagsDelete (osEventFlagsId_t ef_id) {
   EventGroupHandle_t hEventGroup = (EventGroupHandle_t)ef_id;
+  (void) hEventGroup;
   osStatus_t stat;
 
 #ifndef USE_FreeRTOS_HEAP_1
@@ -1516,6 +1519,7 @@ uint32_t osSemaphoreGetCount (osSemaphoreId_t semaphore_id) {
 
 osStatus_t osSemaphoreDelete (osSemaphoreId_t semaphore_id) {
   SemaphoreHandle_t hSemaphore = (SemaphoreHandle_t)semaphore_id;
+  (void) hSemaphore;
   osStatus_t stat;
 
 #ifndef USE_FreeRTOS_HEAP_1
@@ -1765,6 +1769,7 @@ osStatus_t osMessageQueueReset (osMessageQueueId_t mq_id) {
 
 osStatus_t osMessageQueueDelete (osMessageQueueId_t mq_id) {
   QueueHandle_t hQueue = (QueueHandle_t)mq_id;
+  (void) hQueue;
   osStatus_t stat;
 
 #ifndef USE_FreeRTOS_HEAP_1

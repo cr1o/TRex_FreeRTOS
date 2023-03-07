@@ -45,6 +45,5 @@ typedef enum {
 //--------------------------  Variable   ----------------------------------
 volatile motor m[NUMBER_OF_MOTOR];
 //--------------------------  Functions   ----------------------------------
-void delay(uint32_t ms);
 
 #endif /* COMMON_H_ */

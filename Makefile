@@ -40,7 +40,6 @@ Core/Src/main.c \
 Source/UART/UART.c \
 Source/GPIO/GPIO.c \
 Source/Main/application.c \
-Source/Main/common.c \
 Source/DFPlayer/DFPlayer.c \
 Core/Src/freertos.c \
 Core/Src/stm32f0xx_it.c \

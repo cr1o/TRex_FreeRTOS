@@ -11,6 +11,6 @@ void PWM_Init(void);
 errcode RCC_Init(void);
 void GPIO_Init(void);
 void Motor_Init(void);
-void LEDtst(void);
+void LED_test(void);
 
 #endif /* GPIO_H_ */

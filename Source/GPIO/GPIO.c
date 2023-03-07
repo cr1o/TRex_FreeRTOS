@@ -1,5 +1,5 @@
-
 #include "GPIO.h"
+#include "cmsis_os2.h"
 
 //------------------------------------------------------------------------
 //---------------------------   Motor_Init   ------------------------------
@@ -90,7 +90,7 @@ errcode RCC_Init(void) {
 //------------------------------------------------------------------------
 //---------------------------   LEDtest   ------------------------------
 //------------------------------------------------------------------------
-void LEDtst(void){
+void LED_test(void){
 
   if (m[0].EN == 1){
     TIM1->CCR1 = 1000;
@@ -117,7 +117,7 @@ void LEDtst(void){
   if (m[7].EN == 1){
     TIM3->CCR4 = 1000;
   }
-  delay(1000);
+  osDelay(1000);
 
   TIM1->CCR1 = 0;
   TIM1->CCR2 = 0;
@@ -129,32 +129,32 @@ void LEDtst(void){
   TIM3->CCR3 = 0;
   TIM3->CCR4 = 0;
 
-  if (m[0].EN == 1){
+  if (m[0].EN) {
     GPIOA->BSRR |= GPIO_BSRR_BS_15;
   }
-  if (m[1].EN == 1){
+  if (m[1].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_3;
   }
-  if (m[2].EN == 1){
+  if (m[2].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_4;
   }
-  if (m[3].EN == 1){
+  if (m[3].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_5;
   }
-  if (m[4].EN == 1){
+  if (m[4].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_12;
   }
-  if (m[5].EN == 1){
+  if (m[5].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_13;
   }
-  if (m[6].EN == 1){
+  if (m[6].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_14;
   }
-  if (m[7].EN == 1){
+  if (m[7].EN) {
     GPIOB->BSRR |= GPIO_BSRR_BS_15;
   }
 
-  delay(1000);
+  osDelay(1000);
   GPIOA->BSRR |= GPIO_BSRR_BR_15;
   GPIOB->BSRR |= GPIO_BSRR_BR_3;
   GPIOB->BSRR |= GPIO_BSRR_BR_4;
