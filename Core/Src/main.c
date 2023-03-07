@@ -20,6 +20,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "UART.h"
+#include "application.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -72,19 +73,21 @@ void StartDefaultTask(void *argument);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  // Application_Init();
+
   RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  //Enable clock PORT C
   RCC->AHBENR |= RCC_AHBENR_GPIOAEN;  //Enable clock PORT A
   //-----------------   PWM_En   ----------------------------------
-	GPIOA->MODER &= ~GPIO_MODER_MODER0_Msk; //Input mode PA0
+  GPIOA->MODER &= ~GPIO_MODER_MODER0_Msk; //Input mode PA0
   GPIOA->MODER &= ~GPIO_MODER_MODER12_Msk; //Input mode PA12
 
   //M1_En
-	GPIOC->MODER |= GPIO_MODER_MODER9_0;	//General purpose OutPut mode
-	GPIOC->OTYPER &= ~GPIO_OTYPER_OT_9;	//PUSH PULL
+  GPIOC->MODER |= GPIO_MODER_MODER9_0;	//General purpose OutPut mode
+  GPIOC->OTYPER &= ~GPIO_OTYPER_OT_9;	//PUSH PULL
 
-  #define UART1_BAUDRATE 9600
+  // #define UART1_BAUDRATE 9600
 
-  UART1_Init(UART1_BAUDRATE);
+  // UART1_Init(UART1_BAUDRATE);
 
 
   /* USER CODE END 1 */
@@ -168,10 +171,15 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_CFGR_PLLMUL12;
+  RCC_OscInitStruct.PLL.PREDIV = RCC_CFGR2_PREDIV_DIV2;
+
+  // RCC_OscInitStruct.PLL.PLLSource = 
+
+
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -181,7 +189,7 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
@@ -205,24 +213,29 @@ void SystemClock_Config(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  char arr[] = "Hello world";
+  // char arr[] = "Hello world";
   /* Infinite loop */
-  volatile uint32_t count = 0;
+  // volatile uint32_t count = 0;
+  Application_Init();
 
-  for(;;)
-  {
-    if ((GPIOA->IDR & GPIO_IDR_0) == 1 ) {
-      count = 0;
-      USART1_Send_Str(arr);  
-      GPIOC->BSRR |= GPIO_BSRR_BS_9;
-      osDelay(500);      
-    } 
-    if ((GPIOA->IDR & GPIO_IDR_12) != 0 ) {
-      count++;
-      GPIOC->BSRR |= GPIO_BSRR_BS_9;
-      osDelay(500);      
-    }
+  for(;;) {
+    GPIOC->BSRR |= GPIO_BSRR_BS_9;
+    osDelay(500);
     GPIOC->BSRR |= GPIO_BSRR_BR_9;
+    osDelay(500);
+
+    // if ((GPIOA->IDR & GPIO_IDR_0) == 1 ) {
+    //   count = 0;
+    //   USART1_Send_Str(arr);  
+    //   GPIOC->BSRR |= GPIO_BSRR_BS_9;
+    //   osDelay(500);      
+    // } 
+    // if ((GPIOA->IDR & GPIO_IDR_12) != 0 ) {
+    //   count++;
+    //   GPIOC->BSRR |= GPIO_BSRR_BS_9;
+    //   osDelay(500);      
+    // }
+    // GPIOC->BSRR |= GPIO_BSRR_BR_9;
   }
   /* USER CODE END 5 */
 }
